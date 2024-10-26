@@ -199,17 +199,22 @@ def enhanced_parallel_block_v2(A, B, block_size):
 
 # Función para medir tiempo de ejecución
 def measure_time(func, A, B, block_size=None):
-    start = time.time()
+    start = time.perf_counter()  # Comienza la medición con alta precisión
     if block_size:
         result = func(A, B, block_size)
     else:
         result = func(A, B)
-    end = time.time()
-    return (end - start) * 1000000000  # Tiempo en nanosegundos
+    end = time.perf_counter()  # Finaliza la medición
+    return (end - start)  * 1000000000  # Tiempo en nanosegundos
 
+# Función para imprimir una matriz
+def print_matrix(matrix):
+    for row in matrix:
+        print(" ".join(f"{val:10d}" for val in row))
+    print()
 
 # Prueba de los algoritmos con matrices
-matrix_size = 256 # Tamaño de la matriz
+matrix_size = 2 # Tamaño de la matriz
 block_size = matrix_size//2 # Tamaño de bloque para los algoritmos de bloque
 # Cargar matrices A y B desde archivos según el tamaño especificado
 A = load_matrix_from_file('A', matrix_size)
