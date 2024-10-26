@@ -119,7 +119,7 @@ def measure_time(func, A, B, block_size=None):
 
 
 # Prueba de los algoritmos con matrices
-matrix_size = 256  # Tamaño de la matriz
+matrix_size = 64  # Tamaño de la matriz
 block_size = matrix_size//4 # Tamaño de bloque para los algoritmos de bloque
 A = generate_large_matrix(matrix_size)
 B = generate_large_matrix(matrix_size)
