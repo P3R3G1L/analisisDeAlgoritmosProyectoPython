@@ -207,6 +207,14 @@ def measure_time(func, A, B, block_size=None):
     end = time.perf_counter()  # Finaliza la medición
     return (end - start)  * 1000000000  # Tiempo en nanosegundos
 
+# Función para agregar tiempos de ejecución en un archivo .txt
+def save_and_display_results(filename, results, matrix_size):
+    with open(filename, 'w') as f:
+        for name, time_ns in results:
+            line = f"Tiempo de ejecucion ({name}) con tamano {matrix_size}x{matrix_size}: {time_ns:.0f} ns\n"
+            f.write(line)
+            print(line.strip())
+
 # Función para imprimir una matriz
 def print_matrix(matrix):
     for row in matrix:
@@ -214,21 +222,25 @@ def print_matrix(matrix):
     print()
 
 # Prueba de los algoritmos con matrices
-matrix_size = 2 # Tamaño de la matriz
+matrix_size = 16 # Tamaño de la matriz
 block_size = matrix_size//2 # Tamaño de bloque para los algoritmos de bloque
 # Cargar matrices A y B desde archivos según el tamaño especificado
 A = load_matrix_from_file('A', matrix_size)
 B = load_matrix_from_file('B', matrix_size)
 
 # Medición de tiempos
-print("Tiempo de ejecución para cada algoritmo:")
-print("1. Strassen-Winograd:", measure_time(strassen_winograd, A, B), "ns")
-print("2. NaivLoopUnrollingFour:", measure_time(naiv_loop_unroll_four, A, B), "ns")
-print("3. Winograd Scaled:", measure_time(winograd_scaled, A, B), "ns")
-print("4. IV.3 Sequential Block:", measure_time(sequential_block, A, B, block_size), "ns")
-print("5. IV.5 Enhanced Parallel Block:", measure_time(enhanced_parallel_block, A, B, block_size), "ns")
-print("6. NaivLoopUnrollingTwo:", measure_time(naiv_loop_unrolling_two, A, B), "ns")
-print("7. Winograd Original:", measure_time(winograd_original, A, B), "ns")
-print("8. Strassen-Naiv:", measure_time(strassen_naiv, A, B), "ns")
-print("9. III.3 Sequential Block V3:", measure_time(sequential_block_3, A, B, block_size), "ns")
-print("10. III.5 Enhanced Parallel Block V2:", measure_time(enhanced_parallel_block_v2, A, B, block_size), "ns")
+results = [
+    ("Strassen-Winograd", measure_time(strassen_winograd, A, B)),
+    ("NaivLoopUnrollingFour", measure_time(naiv_loop_unroll_four, A, B)),
+    ("Winograd Scaled", measure_time(winograd_scaled, A, B)),
+    ("IV.3 Sequential Block", measure_time(sequential_block, A, B, block_size)),
+    ("IV.5 Enhanced Parallel Block", measure_time(enhanced_parallel_block, A, B, block_size)),
+    ("NaivLoopUnrollingTwo", measure_time(naiv_loop_unrolling_two, A, B)),
+    ("Winograd Original", measure_time(winograd_original, A, B)),
+    ("Strassen-Naiv", measure_time(strassen_naiv, A, B)),
+    ("III.3 Sequential Block V3", measure_time(sequential_block_3, A, B, block_size)),
+    ("III.5 Enhanced Parallel Block V2", measure_time(enhanced_parallel_block_v2, A, B, block_size)),
+]
+
+# Guardar los resultados en un archivo .txt con el tamaño de la matriz
+save_and_display_results("resultados_tiempos.txt", results, matrix_size)
